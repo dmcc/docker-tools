@@ -12,18 +12,18 @@ deployment:
     slapd_pwd_lockout_duration: 1200
     slapd_pwd_max_failure: 5
     slapd_pwd_min_length: 8
-    slapd_rootdn: cn=admin,dc=example,dc=com
+    slapd_rootdn: ""
     slapd_ulimit: 2048
     slapd_userpw_secret: openldap-user-passwords
   xenv:
-    slapd_rootpw_hash: 
+  - name: SLAPD_ROOTPW_HASH
+    valueFrom:
       secretKeyRef:
         name: openldap-rootpw
         key: openldap-rootpw-hash
   containerPorts:
   - containerPort: 389
   - containerPort: 636
-  
 volumeMounts:
 - mountPath: /etc/openldap/prepopulate
   name: prepopulate
@@ -35,6 +35,7 @@ volumeMounts:
   name: user-passwords
 - mountPath: /var/lib/openldap/openldap-data
   name: share
+  subPath: openldap/data
 volumes:
 - name: prepopulate
   configMap:

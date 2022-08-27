@@ -5,18 +5,15 @@ SLAPD_DATA_DIR=/var/lib/openldap/openldap-data
 SLAPD_URLPREFIX=ldap
 export SLAPD_IPC_URL=ldapi://%2Frun%2Fopenldap%2Fldapi
 dc_str=$(echo ${SLAPD_FQDN} | sed -e s:[.]:,dc=:g)
-[[ -z "$SLAPD_SUFFIX" ]] || export SLAPD_SUFFIX=dc=$dc_str
+[ -z "$SLAPD_SUFFIX" ] && export SLAPD_SUFFIX=dc=$dc_str
 
 # Set ulimit - See https://github.com/docker/docker/issues/8231
 ulimit -n $SLAPD_ULIMIT
 
-if [[ ! -d $SLAPD_CONF_DIR ]]; then
+if [ ! -d ${SLAPD_CONF_DIR} ]; then
     # At first startup, create directories and configurations
-    if [[ -z "$SLAPD_ROOTDN" ]]; then
-	echo "** SLAPD_ROOTDN must be specified **"
-	exit 1
-    fi
-    if [[ ! -z "$SLAPD_ROOTPW" ]]; then
+    [ -z "${SLAPD_ROOTDN}" ] && SLAPD_ROOTDN=cn=admin,${SLAPD_SUFFIX}
+    if [ ! -z "$SLAPD_ROOTPW" ]; then
 	SLAPD_ROOTPW_HASH=$(slappasswd -o module-load=pw-pbkdf2.so \
 	   -h {PBKDF2-SHA512} -s "$SLAPD_ROOTPW")
     elif [ -z "$SLAPD_ROOTPW_HASH" && -s /run/secrets/$SLAPD_ROOTPW_SECRET ]; then
@@ -31,8 +28,8 @@ if [[ ! -d $SLAPD_CONF_DIR ]]; then
     mkdir -p -m 750 ${SLAPD_CONF_DIR} /run/openldap
     if [[ "$(ls -A /etc/ssl/openldap)" ]]; then
         CA_CERT=/etc/ssl/openldap/ca_cert.pem
-        SSL_KEY=/etc/ssl/openldap/key.pem
-        SSL_CERT=/etc/ssl/openldap/cert.pem
+        SSL_KEY=/etc/ssl/openldap/tls.key
+        SSL_CERT=/etc/ssl/openldap/tls.crt
 
         # user-provided tls certs
         if [[ -f ${CA_CERT} ]]; then
