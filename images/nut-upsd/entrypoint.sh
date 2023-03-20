@@ -46,6 +46,9 @@ EOF
         upsmon $SERVER
 EOF
   fi
+  if [ ! -z "$INSTCMDS" ]; then
+      echo "        instcmds = \"$INSTCMDS\"" >> /etc/nut/upsd.users
+  fi
   if [ -e /etc/nut/local/upsmon.conf ]; then
     cp /etc/nut/local/upsmon.conf /etc/nut/upsmon.conf
   else
