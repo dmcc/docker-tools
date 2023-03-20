@@ -12,6 +12,7 @@ ENV API_USER=upsmon \
     API_PASSWORD= \
     DESCRIPTION=UPS \
     DRIVER=usbhid-ups \
+    INSTCMDS= \
     GROUP=nut \
     NAME=ups \
     POLLINTERVAL= \
