@@ -47,7 +47,10 @@ EOF
 EOF
   fi
   if [ ! -z "$INSTCMDS" ]; then
-      echo "        instcmds = \"$INSTCMDS\"" >> /etc/nut/upsd.users
+      for instcmd in ${INSTCMDS//,/ }
+      do
+        echo "        instcmds = \"$instcmd\"" >> /etc/nut/upsd.users
+      done
   fi
   if [ -e /etc/nut/local/upsmon.conf ]; then
     cp /etc/nut/local/upsmon.conf /etc/nut/upsmon.conf
