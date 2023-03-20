@@ -43,6 +43,7 @@ API_PASSWORD | | API password, if not using secret
 DESCRIPTION | UPS | user-assigned description
 DRIVER | usbhid-ups | driver (see [compatibility list](http://networkupstools.org/stable-hcl.html))
 GROUP | nut | local group
+INSTCMDS |  | comma-separated list of allowed instant commands
 NAME | ups | user-assigned config name
 POLLINTERVAL | | Poll Interval for ups.conf
 PORT | auto | device port (e.g. /dev/ttyUSB0) on host
